@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LoadPath — 桁架受力分析与杆件重要度工作台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2322324a'/%3E%3Cpath d='M6 24 L16 8 L26 24 M6 24 H26 M16 8 L16 24' stroke='%23e8eef7' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19 L12 5 L21 19 M3 19 H21 M12 5 V19"/></svg>
+    <span>LoadPath</span>
+    <small>v1.0</small>
+  </div>
+  <nav class="cases" id="caseTabs" aria-label="算例"></nav>
+  <div class="verdict" id="verdict" title="校核结论">载入中…</div>
+</header>
+
+<main>
+  <aside class="panel panel-left">
+    <section class="block">
+      <h2>算例说明</h2>
+      <p class="note" id="caseNote">—</p>
+      <dl class="stats" id="caseStats"></dl>
+    </section>
+
+    <section class="block">
+      <h2>设计参数</h2>
+      <label class="field">
+        <span>安全系数 γ</span>
+        <input type="number" id="gamma" value="1.5" min="1.0" max="3.0" step="0.1">
+      </label>
+      <label class="field">
+        <span>挠度限值 跨/N</span>
+        <input type="number" id="defl" value="250" min="100" max="1000" step="50">
+      </label>
+      <label class="field">
+        <span>精简阈值</span>
+        <input type="number" id="prune" value="0.2" min="0.02" max="0.9" step="0.02">
+      </label>
+      <button class="btn" id="apply">重新计算</button>
+    </section>
+
+    <section class="block">
+      <h2>视图</h2>
+      <label class="field stack">
+        <span class="row"><span>变形放大</span><b id="scaleLabel">×200</b></span>
+        <input type="range" id="scale" min="0" max="1000" value="200" step="10">
+      </label>
+      <label class="check"><input type="checkbox" id="anim" checked> 动画</label>
+      <label class="check"><input type="checkbox" id="labels"> 显示杆件编号</label>
+      <label class="check"><input type="checkbox" id="ghost" checked> 显示原始结构</label>
+    </section>
+
+    <section class="block">
+      <h2>图例</h2>
+      <ul class="legend" id="legend"></ul>
+    </section>
+  </aside>
+
+  <section class="stage">
+    <nav class="tabs" id="tabs">
+      <button data-tab="deform" class="on">变形与内力</button>
+      <button data-tab="check">校核</button>
+      <button data-tab="opt">优化</button>
+      <button data-tab="scan">重要度</button>
+    </nav>
+    <div class="canvas-wrap">
+      <canvas id="cv"></canvas>
+      <div class="tip" id="tip" hidden></div>
+      <div class="hint" id="hint">点击杆件查看明细</div>
+    </div>
+  </section>
+
+  <aside class="panel panel-right" id="side"></aside>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

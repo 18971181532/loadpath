@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "loadpath"
+version = "1.0.0"
+description = "零依赖的二维桁架受力分析、截面选型与杆件重要度工作台"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "LoadPath contributors" }]
+keywords = [
+    "truss",
+    "structural-analysis",
+    "finite-element",
+    "structural-engineering",
+    "topology-optimization",
+    "buckling",
+    "redundancy",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = []
+
+[project.scripts]
+loadpath = "loadpath.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/18971181532/loadpath"
+Source = "https://github.com/18971181532/loadpath"
+Issues = "https://github.com/18971181532/loadpath/issues"
+
+[tool.setuptools]
+packages = ["loadpath"]

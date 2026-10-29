@@ -1,0 +1,62 @@
+name: tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.8 在 ubuntu-latest（26.04）没有预编译包，固定到 22.04 才能装；
+        # 其余版本用 latest 覆盖最新系统。
+        include:
+          - os: ubuntu-22.04
+            python-version: "3.8"
+          - os: ubuntu-latest
+            python-version: "3.10"
+          - os: ubuntu-latest
+            python-version: "3.12"
+          - os: ubuntu-latest
+            python-version: "3.13"
+          - os: windows-latest
+            python-version: "3.12"
+          - os: macos-latest
+            python-version: "3.12"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Show version
+        run: python --version
+
+      - name: Run unit tests
+        run: python run_tests.py
+
+      - name: Smoke test the CLI
+        run: |
+          python run.py cases
+          python run.py materials
+          python run.py sections
+          python run.py analyze warren --limit 6
+          python run.py optimize mbb --prune 0.2
+          python run.py scan cantilever
+
+      - name: Run demos
+        run: python run_demos.py
+
+      - name: Design a canopy from scratch
+        run: python examples/custom_truss.py
+
+      - name: Check the package imports cleanly
+        run: python -c "import loadpath; print('loadpath', loadpath.__version__); print(len(loadpath.cases.names()), 'cases')"
